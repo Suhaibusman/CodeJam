@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 class ChatController extends GetxController {
   RxString imagePath = "".obs;
   RxBool loading = false.obs;
+  RxString value = "".obs;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   StreamController<QuerySnapshot>? streamController;
 
@@ -117,14 +118,19 @@ class ChatController extends GetxController {
       // If the search keyword is empty, reset the stream
       initializeStream();
     } else {
+      // Close the previous stream before adding a new one
+      streamController?.close();
+      streamController = StreamController<QuerySnapshot>();
+
       // Filter data based on user name
-      streamController?.sink.addStream(
+      streamController!.addStream(
         firestore
             .collection("Users")
             .where('userName', isGreaterThanOrEqualTo: keyword)
             .where('userName', isLessThan: keyword + 'z')
             .snapshots(),
       );
+      update();
     }
   }
 }

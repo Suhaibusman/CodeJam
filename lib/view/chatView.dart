@@ -38,9 +38,8 @@ class ChatView extends StatelessWidget {
                 controller: chatController.searchController,
                 hintText: "Search",
                 icon: Icons.search,
-                onChanged: (value) {
-                  chatController.search(
-                      value); // Call the search method when the text changes
+                onChanged: (chatCont) {
+                  chatController.search(chatCont);
                 },
               ),
               Expanded(
