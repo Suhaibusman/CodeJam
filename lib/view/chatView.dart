@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:codejam/controller/chatController.dart';
 import 'package:codejam/widget/customtexfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
@@ -26,7 +29,11 @@ class ChatView extends StatelessWidget {
                       fontWeight: FontWeight.w400),
                 ),
               ),
-              CustomTextfeild(controller: chatController.searchController),
+              CustomTextfeild(
+                controller: chatController.searchController,
+                hintText: "Search",
+                icon: Icons.search,
+              ),
               Expanded(
                   child: ListView.builder(
                 itemCount: 10,
@@ -65,62 +72,93 @@ class ChatView extends StatelessWidget {
                 height: 400,
                 width: Get.width * 1,
                 color: Colors.white,
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Text(
-                        "Add Message",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "GeneralSans",
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                    CustomTextfeild(
-                        controller: chatController.userNameController),
-                    CustomTextfeild(
-                        controller: chatController.messageController),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("Upload Image :",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xff4D4B4B),
-                                fontFamily: "GeneralSans",
-                                fontWeight: FontWeight.w400)),
-                        InkWell(
-                            onTap: () {
-                              chatController.getImage();
-                            },
-                            child: const CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                radius: 25,
-                                child: Icon(Icons.camera_alt_sharp)))
-                      ],
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      child: const Text(
-                        "Add",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: "GeneralSans",
-                            fontWeight: FontWeight.w400),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shadowColor: const Color(0xff1E346F),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: Text(
+                          "Add Message",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: "GeneralSans",
+                              fontWeight: FontWeight.w400),
                         ),
                       ),
-                    )
-                  ],
+                      CustomTextfeild(
+                        controller: chatController.userNameController,
+                        hintText: "Username",
+                        icon: Icons.person,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomTextfeild(
+                        controller: chatController.messageController,
+                        hintText: "Message",
+                        icon: Icons.message,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Upload Image :",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xff4D4B4B),
+                                  fontFamily: "GeneralSans",
+                                  fontWeight: FontWeight.w400)),
+                          InkWell(
+                              onTap: () {
+                                chatController.getImage();
+                              },
+                              child: Obx(() => Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: chatController.imagePath.isNotEmpty
+                                          ? FileImage(File(
+                                              chatController.imagePath.value))
+                                          : const AssetImage(
+                                                  'assets/default.png')
+                                              as ImageProvider<Object>,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
+                                  ),
+                                  child: const Icon(Icons.camera_alt_sharp))))
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shadowColor: const Color(0xff1E346F),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          "Add",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: "GeneralSans",
+                              fontWeight: FontWeight.w400),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ));
