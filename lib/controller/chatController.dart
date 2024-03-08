@@ -127,6 +127,7 @@ class ChatController extends GetxController {
             .snapshots()
             .switchMap((event) => Stream.value(event)),
       );
+      update();
     }
   }
 }
