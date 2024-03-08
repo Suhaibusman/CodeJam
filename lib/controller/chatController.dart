@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -11,6 +12,32 @@ class ChatController extends GetxController {
   RxString imagePath = "".obs;
   RxBool loading = false.obs;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  StreamController<QuerySnapshot>? streamController;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Call this method to initialize the stream
+    initializeStream();
+  }
+
+  @override
+  void onClose() {
+    // Close the stream controller when not needed to avoid memory leaks
+    streamController?.close();
+    super.onClose();
+  }
+
+  // Method to initialize the stream from Firestore
+  void initializeStream() {
+    // Initialize the stream controller
+    streamController = StreamController<QuerySnapshot>();
+    // Get the Firestore collection and listen for changes
+    firestore.collection("Users").snapshots().listen((event) {
+      // Add the event to the stream
+      streamController?.add(event);
+    });
+  }
 
   TextEditingController searchController = TextEditingController();
   TextEditingController messageController = TextEditingController();
@@ -54,7 +81,7 @@ class ChatController extends GetxController {
 
         UploadTask uploadImage = FirebaseStorage.instance
             .ref()
-            .child("user")
+            .child("UserImages")
             .child(randomFileName)
             .putFile(File(imagePath.value));
 
@@ -64,12 +91,12 @@ class ChatController extends GetxController {
         // Prepare data to be added to Firestore
         Map<String, dynamic> userData = {
           'userName': userNameController.text,
-          'description': messageController.text,
+          'message': messageController.text,
           'time': DateTime.now(),
           'image': downloadUrl,
         };
 
-        await firestore.collection("User").add(userData);
+        await firestore.collection("Users").add(userData);
 
         loading.value = false;
 

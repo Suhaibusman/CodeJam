@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codejam/controller/chatController.dart';
 import 'package:codejam/widget/customtexfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class ChatView extends StatelessWidget {
   const ChatView({super.key});
@@ -19,15 +21,18 @@ class ChatView extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: Text(
-                  "Messages",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: "GeneralSans",
-                      fontWeight: FontWeight.w400),
-                ),
+              const SizedBox(
+                height: 50,
+              ),
+              const Text(
+                "Messages",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "GeneralSans",
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 30,
               ),
               CustomTextfeild(
                 controller: chatController.searchController,
@@ -35,32 +40,87 @@ class ChatView extends StatelessWidget {
                 icon: Icons.search,
               ),
               Expanded(
-                  child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      radius: 25,
-                      child: Text('$index'),
-                    ),
-                    title: Text(
-                      'Message $index',
-                      style: const TextStyle(
-                          fontSize: 16,
-                          fontFamily: "GeneralSans",
-                          fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      'Message $index',
-                      style: const TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff4D4B4B),
-                          fontFamily: "GeneralSans",
-                          fontWeight: FontWeight.w400),
-                    ),
-                  );
-                },
-              )),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: chatController
+                      .streamController?.stream, // Stream from Firestore
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    }
+                    // If data is available, display it using ListView.builder
+                    return ListView.builder(
+                      itemCount: snapshot.data?.docs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        // Extract data from DocumentSnapshot
+                        var userData = snapshot.data!.docs[index].data()
+                            as Map<String, dynamic>;
+                        // Return your UI widgets using userData
+                        return ListTile(
+                          title: Text(
+                            userData['userName'],
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: "GeneralSans",
+                                fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                            userData['message'].toString(),
+                            style: const TextStyle(
+                                fontSize: 16,
+                                color: Color(0xff4D4B4B),
+                                fontFamily: "GeneralSans",
+                                fontWeight: FontWeight.w400),
+                          ),
+                          // Display image if available
+                          leading: CircleAvatar(
+                            radius: 25,
+                            backgroundImage: userData['image'] != null
+                                ? NetworkImage(userData['image'])
+                                : null,
+                          ),
+                          trailing: Text(DateFormat('hh:mm a')
+                              .format(userData['time'].toDate())),
+                        );
+                      },
+                    );
+                  },
+                ),
+
+                //     ListView.builder(
+                //   itemCount: 10,
+                //   itemBuilder: (context, index) {
+                //     return ListTile(
+                //       leading: CircleAvatar(
+                //         radius: 25,
+                //         child: Text('$index'),
+                //       ),
+                //       title: Text(
+                //         'Message $index',
+                // style: const TextStyle(
+                //     fontSize: 16,
+                //     fontFamily: "GeneralSans",
+                //     fontWeight: FontWeight.bold),
+                //       ),
+                //       subtitle: Text(
+                //         'Message $index',
+                // style: const TextStyle(
+                //     fontSize: 16,
+                //     color: Color(0xff4D4B4B),
+                //     fontFamily: "GeneralSans",
+                //     fontWeight: FontWeight.w400),
+                //       ),
+                //     );
+                //   },
+                // )
+              ),
             ],
           ),
         ),

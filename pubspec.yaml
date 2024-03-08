@@ -44,6 +44,7 @@ dependencies:
   permission_handler: ^11.3.0
   cloud_firestore: ^4.14.0
   firebase_storage: ^11.6.0
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
@@ -86,7 +87,7 @@ flutter:
   fonts:
     - family: GeneralSans
       fonts:
-        - asset: assets/fonts/GeneralSans-Bold.otf
+        - asset: assets/fonts/GeneralSans-Regular.otf
   #       - asset: assets/fonts/GeneralSans-Italic.otf
   #         weight: 700
   # #   - family: Trajan Pro
