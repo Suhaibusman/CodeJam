@@ -38,6 +38,10 @@ class ChatView extends StatelessWidget {
                 controller: chatController.searchController,
                 hintText: "Search",
                 icon: Icons.search,
+                onChanged: (value) {
+                  chatController.search(
+                      value); // Call the search method when the text changes
+                },
               ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
@@ -86,40 +90,20 @@ class ChatView extends StatelessWidget {
                                 ? NetworkImage(userData['image'])
                                 : null,
                           ),
-                          trailing: Text(DateFormat('hh:mm a')
-                              .format(userData['time'].toDate())),
+                          trailing: Text(
+                            DateFormat('hh:mm a')
+                                .format(userData['time'].toDate()),
+                            style: const TextStyle(
+                                fontSize: 12,
+                                color: Color(0xff7D7B7B),
+                                fontFamily: "GeneralSans",
+                                fontWeight: FontWeight.w400),
+                          ),
                         );
                       },
                     );
                   },
                 ),
-
-                //     ListView.builder(
-                //   itemCount: 10,
-                //   itemBuilder: (context, index) {
-                //     return ListTile(
-                //       leading: CircleAvatar(
-                //         radius: 25,
-                //         child: Text('$index'),
-                //       ),
-                //       title: Text(
-                //         'Message $index',
-                // style: const TextStyle(
-                //     fontSize: 16,
-                //     fontFamily: "GeneralSans",
-                //     fontWeight: FontWeight.bold),
-                //       ),
-                //       subtitle: Text(
-                //         'Message $index',
-                // style: const TextStyle(
-                //     fontSize: 16,
-                //     color: Color(0xff4D4B4B),
-                //     fontFamily: "GeneralSans",
-                //     fontWeight: FontWeight.w400),
-                //       ),
-                //     );
-                //   },
-                // )
               ),
             ],
           ),
@@ -197,26 +181,28 @@ class ChatView extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          chatController.addUsersAndMessages();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shadowColor: const Color(0xff1E346F),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: const Text(
-                          "Add",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: "GeneralSans",
-                              fontWeight: FontWeight.w400),
-                        ),
-                      )
+                      Obx(() => chatController.loading.value
+                          ? const CircularProgressIndicator()
+                          : ElevatedButton(
+                              onPressed: () {
+                                chatController.addUsersAndMessages();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shadowColor: const Color(0xff1E346F),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text(
+                                "Add",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: "GeneralSans",
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ))
                     ],
                   ),
                 ),

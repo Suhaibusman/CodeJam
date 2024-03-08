@@ -5,9 +5,14 @@ import 'package:flutter/widgets.dart';
 class CustomTextfeild extends StatelessWidget {
   final TextEditingController? controller;
   final IconData? icon;
+  final ValueChanged<String>? onChanged;
   final String hintText;
   const CustomTextfeild(
-      {super.key, required this.controller, this.icon, required this.hintText});
+      {super.key,
+      required this.controller,
+      this.icon,
+      required this.hintText,
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +42,7 @@ class CustomTextfeild extends StatelessWidget {
             Expanded(
               child: TextField(
                 controller: controller,
+                onChanged: onChanged,
                 decoration: InputDecoration(
                   hintText: hintText,
                   hintStyle: TextStyle(

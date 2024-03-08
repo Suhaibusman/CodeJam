@@ -111,4 +111,20 @@ class ChatController extends GetxController {
       Get.snackbar("Error", e.toString());
     }
   }
+
+  void search(String keyword) {
+    if (keyword.isEmpty) {
+      // If the search keyword is empty, reset the stream
+      initializeStream();
+    } else {
+      // Filter data based on user name
+      streamController?.sink.addStream(
+        firestore
+            .collection("Users")
+            .where('userName', isGreaterThanOrEqualTo: keyword)
+            .where('userName', isLessThan: keyword + 'z')
+            .snapshots(),
+      );
+    }
+  }
 }
