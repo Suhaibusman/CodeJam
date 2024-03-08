@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "469713840000",
+    "project_id": "codejam-bd821",
+    "storage_bucket": "codejam-bd821.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469713840000:android:3827ddf307c5e0de92c365",
+        "android_client_info": {
+          "package_name": "com.example.codejam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZiFS32ByxLQsILwRq315qZ5gqBRDQdVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
