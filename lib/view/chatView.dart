@@ -139,7 +139,7 @@ class ChatView extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Get.back();
+                          chatController.addUsersAndMessages();
                         },
                         style: ElevatedButton.styleFrom(
                           shadowColor: const Color(0xff1E346F),
@@ -149,7 +149,7 @@ class ChatView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Add",
                           style: TextStyle(
                               fontSize: 16,
