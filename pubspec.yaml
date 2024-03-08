@@ -40,6 +40,7 @@ dependencies:
   google_nav_bar: ^5.0.6
   auto_size_text: ^3.0.0
   firebase_core: ^2.24.2
+  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:

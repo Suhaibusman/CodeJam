@@ -1,11 +1,13 @@
+import 'package:codejam/controller/chatController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+class ChatView extends StatelessWidget {
+  const ChatView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    ChatController chatController = Get.put(ChatController());
     return Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(10),
@@ -52,7 +54,7 @@ class HomeView extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Color(0xff1E346F),
+          backgroundColor: const Color(0xff1E346F),
           onPressed: () {
             Get.bottomSheet(Container(
               height: 300,
@@ -86,11 +88,30 @@ class HomeView extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Upload Image :",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff4D4B4B),
+                              fontFamily: "GeneralSans",
+                              fontWeight: FontWeight.w400)),
+                      InkWell(
+                          onTap: () {
+                            chatController.getImage();
+                          },
+                          child: const CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              radius: 25,
+                              child: Icon(Icons.camera_alt_sharp)))
+                    ],
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       Get.back();
                     },
-                    child: Text(
+                    child: const Text(
                       "Add",
                       style: TextStyle(
                           fontSize: 16,
