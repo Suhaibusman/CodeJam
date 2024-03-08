@@ -13,6 +13,9 @@ class CustomTextfeild extends StatelessWidget {
       this.icon,
       required this.hintText,
       this.onChanged});
+  void clearText() {
+    controller?.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
