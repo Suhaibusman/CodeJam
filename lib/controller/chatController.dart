@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ChatController extends GetxController {
   RxString imagePath = "".obs;
@@ -118,19 +119,14 @@ class ChatController extends GetxController {
       // If the search keyword is empty, reset the stream
       initializeStream();
     } else {
-      // Close the previous stream before adding a new one
-      streamController?.close();
-      streamController = StreamController<QuerySnapshot>();
-
-      // Filter data based on user name
-      streamController!.addStream(
+      streamController?.addStream(
         firestore
             .collection("Users")
             .where('userName', isGreaterThanOrEqualTo: keyword)
             .where('userName', isLessThan: keyword + 'z')
-            .snapshots(),
+            .snapshots()
+            .switchMap((event) => Stream.value(event)),
       );
-      update();
     }
   }
 }
