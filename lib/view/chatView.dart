@@ -112,7 +112,7 @@ class ChatView extends StatelessWidget {
           onPressed: () {
             Get.bottomSheet(SingleChildScrollView(
               child: Container(
-                height: 400,
+                height: 450,
                 width: Get.width * 1,
                 color: Colors.white,
                 child: Padding(
@@ -128,6 +128,9 @@ class ChatView extends StatelessWidget {
                               fontFamily: "GeneralSans",
                               fontWeight: FontWeight.w400),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       CustomTextfeild(
                         controller: chatController.userNameController,
@@ -187,6 +190,9 @@ class ChatView extends StatelessWidget {
                                 chatController.addUsersAndMessages();
                               },
                               style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors
+                                    .black, // Set background color to black
+                                // onPrimary: Colors.white, // Set text color to white
                                 shadowColor: const Color(0xff1E346F),
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 50, vertical: 15),
@@ -199,7 +205,8 @@ class ChatView extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: "GeneralSans",
-                                    fontWeight: FontWeight.w400),
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white),
                               ),
                             ))
                     ],
